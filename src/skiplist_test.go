@@ -7,7 +7,16 @@ import (
 func TestSkipListInsert(t *testing.T) {
 	s := NewSkipList()
 
-	key = []byte{13,25}
-	vale = []byte
-	s.Insert()
+	a := "a"
+	b := "b"
+	c := "c"
+	d := "d"
+
+	s.Insert([]byte(c), []byte(d))
+	s.Insert([]byte(a), []byte(b))
+
+	PrintSkipList(s)
+
+	t.Errorf("TTTT")
+
 }
