@@ -108,15 +108,41 @@ func (s *SkipList) Insert(key []byte, value []byte) {
 	s.size++
 }
 
-func (s *SkipList) Find(key []byte) ([]byte,error){
-	
+func (s *SkipList) Find(key []byte) ([]byte, error) {
+
 	h := s.Height
 
-	for i := h-1;i>=0;i--{
-		
+	starth := h - 1
+
+	for i := h - 1; i >= 0; i-- {
+		if s.HeadIndexes[i] == nil {
+			continue
+		}
+
+		isBig := bytes.Compare(s.HeadIndexes[i].Key, key)
+		if isBig == 0 {
+			return s.HeadIndexes[i].Value, nil
+		}
+
+		if isBig == 1 {
+			starth = i
+			break
+		}
 	}
 
-	return nil,fmt.Errorf("Not Found")
+	ptr := s.HeadIndexes[starth]
+
+	for starth >= 0 {
+		if bytes.Equal(ptr.Key, key) {
+			return ptr.Value, nil
+		}
+
+		nextPtr := ptr.NextIndexes[starth]
+		if nextPtr == nil && bytes.Compare(nextPtr.Key, key) == 1 {
+			starth--
+		}
+	}
+	return nil, fmt.Errorf("not found")
 }
 
 // must be used in insert within mutex Lock
