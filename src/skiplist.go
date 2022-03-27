@@ -109,7 +109,6 @@ func (s *SkipList) Insert(key []byte, value []byte) {
 }
 
 func (s *SkipList) Find(key []byte) ([]byte, error) {
-
 	h := s.Height
 
 	starth := h - 1
