@@ -16,7 +16,4 @@ func TestSkipListInsert(t *testing.T) {
 	s.Insert([]byte(a), []byte(b))
 
 	PrintSkipList(s)
-
-	t.Errorf("TTTT")
-
 }

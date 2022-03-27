@@ -108,6 +108,17 @@ func (s *SkipList) Insert(key []byte, value []byte) {
 	s.size++
 }
 
+func (s *SkipList) Find(key []byte) ([]byte,error){
+	
+	h := s.Height
+
+	for i := h-1;i>=0;i--{
+		
+	}
+
+	return nil,fmt.Errorf("Not Found")
+}
+
 // must be used in insert within mutex Lock
 func (s *SkipList) getInsertHeight() int {
 	if s.size == 0 {
