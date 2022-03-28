@@ -44,7 +44,11 @@ type List struct {
 	capacity int
 }
 
-func (l *List) getIterator() ListIterator {
+func (l *List) GetSize() int {
+	return l.size
+}
+
+func (l *List) GetIterator() ListIterator {
 	return l.Head
 }
 
@@ -64,31 +68,52 @@ func (l *List) tail() *ListNode {
 	return l.Tail
 }
 
+func (l *List) PrintList() {
+
+	var ptr *ListNode = l.Head
+	for ptr != nil {
+		fmt.Println(ptr.val)
+		ptr = ptr.next
+	}
+}
+
+func (l *List) PrintReList() {
+	var ptr *ListNode = l.Tail
+	for ptr != nil {
+		fmt.Println(ptr.val)
+		ptr = ptr.pre
+	}
+}
+
 func (l *List) PushHead(value interface{}) {
 
-	l.size++
-	if l.Head == nil {
+	if l.size == 0 {
 		tmpNode := NewListNode(value, nil, nil)
 		l.Head = tmpNode
 		l.Tail = tmpNode
+		l.size++
 		return
 	}
 
 	tmpNode := NewListNode(value, nil, l.Head)
+	l.Head.pre = tmpNode
+	l.size++
 	l.Head = tmpNode
 }
 
 func (l *List) PushTail(value interface{}) {
 
-	l.size++
-	if l.Tail == nil {
+	if l.size == 0 {
 		tmpNode := NewListNode(value, nil, nil)
 		l.Head = tmpNode
 		l.Tail = tmpNode
+		l.size++
 		return
 	}
 
 	tmpNode := NewListNode(value, l.Tail, nil)
+	l.Tail.next = tmpNode
+	l.size++
 	l.Tail = tmpNode
 }
 
@@ -98,17 +123,22 @@ func (l *List) PopTail() (interface{}, error) {
 		return nil, fmt.Errorf("no element")
 	}
 
-	l.size--
+	fmt.Println(l.size)
 	if l.size == 1 {
 		v := l.Head.val
 		l.Head = nil
 		l.Tail = nil
+		l.size--
 		return v, nil
 	}
 
 	v := l.Tail.val
+	if l.Tail.pre == nil {
+		fmt.Println("AAAAA")
+	}
 	l.Tail.pre.next = nil
-	l.Tail = nil
+	l.Tail = l.Tail.pre
+	l.size--
 	return v, nil
 }
 
@@ -117,16 +147,17 @@ func (l *List) PopHead() (interface{}, error) {
 		return nil, fmt.Errorf("no element")
 	}
 
-	l.size--
 	if l.size == 1 {
 		v := l.Head.val
 		l.Head = nil
 		l.Tail = nil
+		l.size--
 		return v, nil
 	}
 
 	v := l.Head.val
 	l.Head.next.pre = nil
-	l.Head = nil
+	l.Head = l.Head.next
+	l.size--
 	return v, nil
 }
