@@ -161,3 +161,33 @@ func (l *List) PopHead() (interface{}, error) {
 	l.size--
 	return v, nil
 }
+
+func (l *List) Delete(n *ListNode) {
+	if l.size == 0 {
+		panic("list erase nil node")
+	}
+
+	if l.size == 1 {
+		l.Head = nil
+		l.Tail = nil
+		l.size--
+		return 
+	}
+
+
+	if l.Head == n{
+		l.Head = n.next
+	}
+	if l.Tail == n{
+		l.Tail = n.pre
+	}
+
+	if n.pre != nil{
+		n.pre.next = n.next
+	}
+	if n.next != nil{
+		n.next.pre = n.pre
+	}
+	
+	l.size--
+}
