@@ -16,6 +16,7 @@ type SkipListNode struct {
 }
 
 type SkipList struct {
+	rwLocker    sync.RWMutex
 	size        int
 	byteSize    int
 	Height      int
@@ -45,6 +46,8 @@ func NewSkipListNode(key []byte, value []byte) *SkipListNode {
 }
 
 func (s *SkipList) Insert(key []byte, value []byte) {
+	s.rwLocker.Lock()
+	defer s.rwLocker.Unlock()
 
 	tmpNode := NewSkipListNode(key, value)
 	s.Mu.Lock()
@@ -109,6 +112,9 @@ func (s *SkipList) Insert(key []byte, value []byte) {
 }
 
 func (s *SkipList) Find(key []byte) ([]byte, error) {
+	s.rwLocker.RLock()
+	defer s.rwLocker.RUnlock()
+
 	h := s.Height
 
 	starth := h - 1
@@ -145,6 +151,9 @@ func (s *SkipList) Find(key []byte) ([]byte, error) {
 }
 
 func (s *SkipList) Delete(key []byte) error {
+	s.rwLocker.Lock()
+	defer s.rwLocker.Unlock()
+
 	h := s.Height
 	starth := h - 1
 
